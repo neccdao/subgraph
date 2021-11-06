@@ -1,0 +1,174 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: VaultFacet
+    network: rinkeby
+    source:
+      # NOTE - Update in constants.ts too
+      address: "0x2DE2403fab78f9B12ADB283c90e9e7B3EE51be5e"
+      abi: VaultFacet
+      startBlock: 9500000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Position
+        - Account
+        - Action
+        - LP
+        - Collateral
+        - DirectPoolDeposit
+      abis:
+        - name: VaultLib
+          file: ./abis/contracts/facets/Vault/VaultLib.sol/VaultLib.json
+        - name: VaultFacet
+          file: ./abis/contracts/facets/Vault/VaultFacet.sol/VaultFacet.json
+        - name: VaultNUSDFacet
+          file: ./abis/contracts/facets/Vault/VaultNUSDFacet.sol/VaultNUSDFacet.json
+      eventHandlers:
+        - event: IncreasePosition(bytes32,address,address,address,uint256,uint256,bool,uint256,uint256)
+          handler: handleIncreasePosition
+        - event: DecreasePosition(bytes32,address,address,address,uint256,uint256,bool,uint256,uint256)
+          handler: handleDecreasePosition
+        - event: UpdatePosition(bytes32,uint256,uint256,uint256,uint256,uint256,int256)
+          handler: handleUpdatePosition
+        - event: ClosePosition(bytes32,uint256,uint256,uint256,uint256,uint256,int256)
+          handler: handleClosePosition
+        - event: LiquidatePosition(bytes32,address,address,address,bool,uint256,uint256,uint256,int256,uint256)
+          handler: handleLiquidatePosition
+      file: ./src/mapping.ts
+
+  - kind: ethereum/contract
+    name: VaultLib
+    network: rinkeby
+    source:
+      # NOTE - Update in constants.ts too
+      address: "0x2DE2403fab78f9B12ADB283c90e9e7B3EE51be5e"
+      abi: VaultLib
+      startBlock: 9500000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Position
+        - Account
+        - Action
+        - LP
+        - Collateral
+        - DirectPoolDeposit
+      abis:
+        - name: VaultLib
+          file: ./abis/contracts/facets/Vault/VaultLib.sol/VaultLib.json
+        - name: VaultNUSDFacet
+          file: ./abis/contracts/facets/Vault/VaultNUSDFacet.sol/VaultNUSDFacet.json
+        - name: VaultFacet
+          file: ./abis/contracts/facets/Vault/VaultFacet.sol/VaultFacet.json
+      eventHandlers:
+        - event: DecreaseGuaranteedUsd(address,uint256)
+          handler: handleIncreaseGuaranteedUsd
+        - event: DecreaseNUSDAmount(address,uint256)
+          handler: handleIncreaseNUSDAmount
+        - event: DecreasePoolAmount(address,uint256)
+          handler: handleIncreasePoolAmount
+        - event: DecreaseReservedAmount(address,uint256)
+          handler: handleIncreaseReservedAmount
+
+        - event: IncreaseGuaranteedUsd(address,uint256)
+          handler: handleIncreaseGuaranteedUsd
+        - event: IncreaseNUSDAmount(address,uint256)
+          handler: handleIncreaseNUSDAmount
+        - event: IncreasePoolAmount(address,uint256)
+          handler: handleIncreasePoolAmount
+        - event: IncreaseReservedAmount(address,uint256)
+          handler: handleIncreaseReservedAmount
+
+        - event: CollectMarginFees(address,uint256,uint256)
+          handler: handleCollectMarginFees
+        - event: CollectSwapFees(address,uint256,uint256)
+          handler: handleCollectSwapFees
+        - event: UpdateFundingRate(address,uint256)
+          handler: handleUpdateFundingRate
+      file: ./src/mapping.ts
+
+  - kind: ethereum/contract
+    name: VaultNUSDFacet
+    network: rinkeby
+    source:
+      # NOTE - Update in constants.ts too
+      address: "0x2DE2403fab78f9B12ADB283c90e9e7B3EE51be5e"
+      abi: VaultNUSDFacet
+      startBlock: 9500000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Position
+        - Account
+        - Action
+        - LP
+        - Collateral
+        - DirectPoolDeposit
+      abis:
+        - name: VaultNUSDFacet
+          file: ./abis/contracts/facets/Vault/VaultNUSDFacet.sol/VaultNUSDFacet.json
+      eventHandlers:
+        - event: BuyNUSD(address,address,uint256,uint256)
+          handler: handleBuyNUSD
+        - event: SellNUSD(address,address,uint256,uint256)
+          handler: handleSellNUSD
+        - event: Swap(address,address,address,uint256,uint256)
+          handler: handleVaultSwap
+      file: ./src/mapping.ts
+
+  - kind: ethereum/contract
+    name: VaultConfigFacet
+    network: rinkeby
+    source:
+      # NOTE - Update in constants.ts too
+      address: "0x2DE2403fab78f9B12ADB283c90e9e7B3EE51be5e"
+      abi: VaultConfigFacet
+      startBlock: 9500000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Position
+        - Account
+        - Action
+        - LP
+        - Collateral
+        - DirectPoolDeposit
+      abis:
+        - name: VaultConfigFacet
+          file: ./abis/contracts/facets/Vault/VaultConfigFacet.sol/VaultConfigFacet.json
+      eventHandlers:
+        - event: DirectPoolDeposit(address,uint256)
+          handler: handleDirectPoolDeposit
+      file: ./src/mapping.ts
+
+  # - kind: ethereum/contract
+  #   name: Router
+  #   network: rinkeby
+  #   source:
+  #     address: "0x4aba0e8481a0df183e8cf86fc9294bdf1cde6d78"
+  #     abi: Router
+  #     startBlock: 9500000
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.4
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - Swap
+  #     abis:
+  #       - name: Router
+  #         file: ./abis/Router.json
+  #     eventHandlers:
+  #       - event: Swap(address,address,address,uint256,uint256)
+  #         handler: handleSwap
+  #     file: ./src/mapping.ts

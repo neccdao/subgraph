@@ -1,0 +1,122 @@
+enum ActionType {
+  IncreasePosition
+  DecreasePosition
+  UpdatePosition
+  ClosePosition
+  LiquidatePosition
+  Swap
+  BuyNUSD
+  SellNUSD
+  # Claim
+  # ZapSP :
+  # Deposit
+  # Withdraw
+}
+
+type Position @entity {
+  id: ID!
+  key: Bytes!
+  account: Account!
+  size: BigInt!
+  collateral: BigInt!
+  collateralToken: Bytes!
+  indexToken: Bytes!
+  isLong: Boolean!
+  averagePrice: BigInt!
+  entryFundingRate: BigInt!
+  reserveAmount: BigInt!
+  realisedPnl: BigInt!
+  lastIncreasedTime: BigInt!
+}
+
+# Polymorphism :))
+type Action @entity {
+  id: ID!
+  type: ActionType!
+  account: Account!
+  timestamp: BigInt!
+
+  # IncreasePosition | DecreasePosition
+  collateralToken: Bytes
+  indexToken: Bytes
+  collateralDelta: BigInt
+  sizeDelta: BigInt
+  isLong: Boolean
+  price: BigInt
+  fee: BigInt
+
+  # UpdatePosition | ClosePosition | LiquidatePosition
+  realisedPnl: BigInt
+
+  # LiquidatePosition
+  key: Bytes
+  size: BigInt
+  collateral: BigInt
+  reserveAmount: BigInt
+  markPrice: BigInt
+  liquidatedStatus: BigInt
+
+  # UpdatePosition
+  averagePrice: BigInt
+  entryFundingRate: BigInt
+
+  # Swap
+  tokenIn: Bytes
+  tokenOut: Bytes
+  amountIn: BigInt
+  amountOut: BigInt
+
+  # BuyNUSD | SellNUSD
+  token: Bytes
+  tokenAmount: BigInt
+  nusdAmount: BigInt
+
+  # RedeemReward
+  amount: BigInt
+
+  # TODO:
+  # SentNUSD
+  # ReceivedNUSD
+  # DYT.transferMintedRewards
+  # DYT.claim
+}
+
+type LP @entity {
+  id: ID!
+  account: Account!
+
+  token: Bytes
+  tokenAmount: BigInt
+  nusdAmount: BigInt
+}
+
+type Collateral @entity {
+  id: ID!
+  feeReserves: BigInt!
+  guaranteedUsd: BigInt!
+  nusdAmounts: BigInt!
+  reservedAmounts: BigInt!
+  poolAmounts: BigInt!
+  cumulativeFundingRate: BigInt!
+  lastFundingTime: BigInt!
+  utilisationRate: BigInt!
+  longLiquidations: BigInt!
+  shortLiquidations: BigInt!
+  longs: BigInt!
+  shorts: BigInt!
+  longOpenInterest: BigInt!
+  shortOpenInterest: BigInt!
+}
+
+type Account @entity {
+  id: ID!
+  actions: [Action!]! @derivedFrom(field: "account")
+  positions: [Position!]! @derivedFrom(field: "account")
+  lps: [LP!]! @derivedFrom(field: "account")
+}
+
+type DirectPoolDeposit @entity {
+  id: ID!
+  token: Bytes! # address
+  amount: BigInt! # uint256
+}

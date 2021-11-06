@@ -1,0 +1,22 @@
+{
+  "name": "necc-subgraph",
+  "license": "MIT",
+  "scripts": {
+    "install-matchstick": "./scripts/install-matchstick.sh",
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "test": "yarn build && matchstick",
+    "deploy": "graph deploy --product hosted-service rej156/necc-rinkeby",
+    "create-local": "graph create --node http://localhost:8020/ necc-subgraph",
+    "remove-local": "graph remove --node http://localhost:8020/ necc-subgraph",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 necc-subgraph"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.21.1",
+    "@graphprotocol/graph-ts": "0.20.0",
+    "matchstick-as": "^0.0.50"
+  },
+  "devDependencies": {
+    "prettier": "^2.3.2"
+  }
+}
