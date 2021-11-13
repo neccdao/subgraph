@@ -26,8 +26,8 @@ dataSources:
           file: ./abis/contracts/facets/Vault/VaultLib.sol/VaultLib.json
         - name: VaultFacet
           file: ./abis/contracts/facets/Vault/VaultFacet.sol/VaultFacet.json
-        - name: VaultNUSDFacet
-          file: ./abis/contracts/facets/Vault/VaultNUSDFacet.sol/VaultNUSDFacet.json
+        - name: VaultNDOLFacet
+          file: ./abis/contracts/facets/Vault/VaultNDOLFacet.sol/VaultNDOLFacet.json
       eventHandlers:
         - event: IncreasePosition(bytes32,address,address,address,uint256,uint256,bool,uint256,uint256)
           handler: handleIncreasePosition
@@ -63,15 +63,15 @@ dataSources:
       abis:
         - name: VaultLib
           file: ./abis/contracts/facets/Vault/VaultLib.sol/VaultLib.json
-        - name: VaultNUSDFacet
-          file: ./abis/contracts/facets/Vault/VaultNUSDFacet.sol/VaultNUSDFacet.json
+        - name: VaultNDOLFacet
+          file: ./abis/contracts/facets/Vault/VaultNDOLFacet.sol/VaultNDOLFacet.json
         - name: VaultFacet
           file: ./abis/contracts/facets/Vault/VaultFacet.sol/VaultFacet.json
       eventHandlers:
         - event: DecreaseGuaranteedUsd(address,uint256)
           handler: handleIncreaseGuaranteedUsd
-        - event: DecreaseNUSDAmount(address,uint256)
-          handler: handleIncreaseNUSDAmount
+        - event: DecreaseNDOLAmount(address,uint256)
+          handler: handleIncreaseNDOLAmount
         - event: DecreasePoolAmount(address,uint256)
           handler: handleIncreasePoolAmount
         - event: DecreaseReservedAmount(address,uint256)
@@ -79,8 +79,8 @@ dataSources:
 
         - event: IncreaseGuaranteedUsd(address,uint256)
           handler: handleIncreaseGuaranteedUsd
-        - event: IncreaseNUSDAmount(address,uint256)
-          handler: handleIncreaseNUSDAmount
+        - event: IncreaseNDOLAmount(address,uint256)
+          handler: handleIncreaseNDOLAmount
         - event: IncreasePoolAmount(address,uint256)
           handler: handleIncreasePoolAmount
         - event: IncreaseReservedAmount(address,uint256)
@@ -95,12 +95,12 @@ dataSources:
       file: ./src/mapping.ts
 
   - kind: ethereum/contract
-    name: VaultNUSDFacet
+    name: VaultNDOLFacet
     network: rinkeby
     source:
       # NOTE - Update in constants.ts too
       address: "0x2DE2403fab78f9B12ADB283c90e9e7B3EE51be5e"
-      abi: VaultNUSDFacet
+      abi: VaultNDOLFacet
       startBlock: 9500000
     mapping:
       kind: ethereum/events
@@ -114,13 +114,13 @@ dataSources:
         - Collateral
         - DirectPoolDeposit
       abis:
-        - name: VaultNUSDFacet
-          file: ./abis/contracts/facets/Vault/VaultNUSDFacet.sol/VaultNUSDFacet.json
+        - name: VaultNDOLFacet
+          file: ./abis/contracts/facets/Vault/VaultNDOLFacet.sol/VaultNDOLFacet.json
       eventHandlers:
-        - event: BuyNUSD(address,address,uint256,uint256)
-          handler: handleBuyNUSD
-        - event: SellNUSD(address,address,uint256,uint256)
-          handler: handleSellNUSD
+        - event: BuyNDOL(address,address,uint256,uint256)
+          handler: handleBuyNDOL
+        - event: SellNDOL(address,address,uint256,uint256)
+          handler: handleSellNDOL
         - event: Swap(address,address,address,uint256,uint256)
           handler: handleVaultSwap
       file: ./src/mapping.ts

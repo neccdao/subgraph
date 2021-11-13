@@ -8,9 +8,9 @@ import {
 } from "matchstick-as/assembly/index";
 import { IncreaseGuaranteedUsd } from "../generated/VaultLib/VaultLib";
 import {
-  createBuyNUSDEvent,
+  createBuyNDOLEvent,
   createIncreaseGuaranteedUsdEvent,
-  handleBuyNUSD,
+  handleBuyNDOL,
   handleIncreaseGuaranteedUsd,
 } from "../src/mapping";
 import { addMetadata } from "matchstick-as/assembly/event";

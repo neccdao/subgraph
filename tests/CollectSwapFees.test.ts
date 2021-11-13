@@ -8,9 +8,9 @@ import {
 } from "matchstick-as/assembly/index";
 import { CollectSwapFees } from "../generated/VaultLib/VaultLib";
 import {
-  createBuyNUSDEvent,
+  createBuyNDOLEvent,
   createCollectSwapFeesEvent,
-  handleBuyNUSD,
+  handleBuyNDOL,
   handleCollectSwapFees,
 } from "../src/mapping";
 import { addMetadata } from "matchstick-as/assembly/event";

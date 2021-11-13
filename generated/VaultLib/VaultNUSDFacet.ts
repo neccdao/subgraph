@@ -7,19 +7,19 @@ import {
   Entity,
   Bytes,
   Address,
-  BigInt
+  BigInt,
 } from "@graphprotocol/graph-ts";
 
-export class BuyNUSD extends ethereum.Event {
-  get params(): BuyNUSD__Params {
-    return new BuyNUSD__Params(this);
+export class BuyNDOL extends ethereum.Event {
+  get params(): BuyNDOL__Params {
+    return new BuyNDOL__Params(this);
   }
 }
 
-export class BuyNUSD__Params {
-  _event: BuyNUSD;
+export class BuyNDOL__Params {
+  _event: BuyNDOL;
 
-  constructor(event: BuyNUSD) {
+  constructor(event: BuyNDOL) {
     this._event = event;
   }
 
@@ -35,21 +35,21 @@ export class BuyNUSD__Params {
     return this._event.parameters[2].value.toBigInt();
   }
 
-  get nusdAmount(): BigInt {
+  get ndolAmount(): BigInt {
     return this._event.parameters[3].value.toBigInt();
   }
 }
 
-export class SellNUSD extends ethereum.Event {
-  get params(): SellNUSD__Params {
-    return new SellNUSD__Params(this);
+export class SellNDOL extends ethereum.Event {
+  get params(): SellNDOL__Params {
+    return new SellNDOL__Params(this);
   }
 }
 
-export class SellNUSD__Params {
-  _event: SellNUSD;
+export class SellNDOL__Params {
+  _event: SellNDOL;
 
-  constructor(event: SellNUSD) {
+  constructor(event: SellNDOL) {
     this._event = event;
   }
 
@@ -61,7 +61,7 @@ export class SellNUSD__Params {
     return this._event.parameters[1].value.toAddress();
   }
 
-  get nusdAmount(): BigInt {
+  get ndolAmount(): BigInt {
     return this._event.parameters[2].value.toBigInt();
   }
 
@@ -104,9 +104,9 @@ export class Swap__Params {
   }
 }
 
-export class VaultNUSDFacet extends ethereum.SmartContract {
-  static bind(address: Address): VaultNUSDFacet {
-    return new VaultNUSDFacet("VaultNUSDFacet", address);
+export class VaultNDOLFacet extends ethereum.SmartContract {
+  static bind(address: Address): VaultNDOLFacet {
+    return new VaultNDOLFacet("VaultNDOLFacet", address);
   }
 
   availableReserve(_token: Address): BigInt {
@@ -132,25 +132,25 @@ export class VaultNUSDFacet extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  buyNUSD(_token: Address, _receiver: Address): BigInt {
-    let result = super.call("buyNUSD", "buyNUSD(address,address):(uint256)", [
+  buyNDOL(_token: Address, _receiver: Address): BigInt {
+    let result = super.call("buyNDOL", "buyNDOL(address,address):(uint256)", [
       ethereum.Value.fromAddress(_token),
-      ethereum.Value.fromAddress(_receiver)
+      ethereum.Value.fromAddress(_receiver),
     ]);
 
     return result[0].toBigInt();
   }
 
-  try_buyNUSD(
+  try_buyNDOL(
     _token: Address,
     _receiver: Address
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "buyNUSD",
-      "buyNUSD(address,address):(uint256)",
+      "buyNDOL",
+      "buyNDOL(address,address):(uint256)",
       [
         ethereum.Value.fromAddress(_token),
-        ethereum.Value.fromAddress(_receiver)
+        ethereum.Value.fromAddress(_receiver),
       ]
     );
     if (result.reverted) {
@@ -162,7 +162,7 @@ export class VaultNUSDFacet extends ethereum.SmartContract {
 
   feeReserves(_token: Address): BigInt {
     let result = super.call("feeReserves", "feeReserves(address):(uint256)", [
-      ethereum.Value.fromAddress(_token)
+      ethereum.Value.fromAddress(_token),
     ]);
 
     return result[0].toBigInt();
@@ -181,13 +181,13 @@ export class VaultNUSDFacet extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  getRedemptionAmount(_token: Address, _nusdAmount: BigInt): BigInt {
+  getRedemptionAmount(_token: Address, _ndolAmount: BigInt): BigInt {
     let result = super.call(
       "getRedemptionAmount",
       "getRedemptionAmount(address,uint256):(uint256)",
       [
         ethereum.Value.fromAddress(_token),
-        ethereum.Value.fromUnsignedBigInt(_nusdAmount)
+        ethereum.Value.fromUnsignedBigInt(_ndolAmount),
       ]
     );
 
@@ -196,14 +196,14 @@ export class VaultNUSDFacet extends ethereum.SmartContract {
 
   try_getRedemptionAmount(
     _token: Address,
-    _nusdAmount: BigInt
+    _ndolAmount: BigInt
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "getRedemptionAmount",
       "getRedemptionAmount(address,uint256):(uint256)",
       [
         ethereum.Value.fromAddress(_token),
-        ethereum.Value.fromUnsignedBigInt(_nusdAmount)
+        ethereum.Value.fromUnsignedBigInt(_ndolAmount),
       ]
     );
     if (result.reverted) {
@@ -288,7 +288,7 @@ export class VaultNUSDFacet extends ethereum.SmartContract {
       "getTargetAdjustedFee(address,uint256):(uint256)",
       [
         ethereum.Value.fromAddress(_token),
-        ethereum.Value.fromUnsignedBigInt(_fee)
+        ethereum.Value.fromUnsignedBigInt(_fee),
       ]
     );
 
@@ -304,7 +304,7 @@ export class VaultNUSDFacet extends ethereum.SmartContract {
       "getTargetAdjustedFee(address,uint256):(uint256)",
       [
         ethereum.Value.fromAddress(_token),
-        ethereum.Value.fromUnsignedBigInt(_fee)
+        ethereum.Value.fromUnsignedBigInt(_fee),
       ]
     );
     if (result.reverted) {
@@ -337,14 +337,14 @@ export class VaultNUSDFacet extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  nusd(): Address {
-    let result = super.call("nusd", "nusd():(address)", []);
+  ndol(): Address {
+    let result = super.call("ndol", "ndol():(address)", []);
 
     return result[0].toAddress();
   }
 
-  try_nusd(): ethereum.CallResult<Address> {
-    let result = super.tryCall("nusd", "nusd():(address)", []);
+  try_ndol(): ethereum.CallResult<Address> {
+    let result = super.tryCall("ndol", "ndol():(address)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -352,18 +352,18 @@ export class VaultNUSDFacet extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  nusdAmounts(_token: Address): BigInt {
-    let result = super.call("nusdAmounts", "nusdAmounts(address):(uint256)", [
-      ethereum.Value.fromAddress(_token)
+  ndolAmounts(_token: Address): BigInt {
+    let result = super.call("ndolAmounts", "ndolAmounts(address):(uint256)", [
+      ethereum.Value.fromAddress(_token),
     ]);
 
     return result[0].toBigInt();
   }
 
-  try_nusdAmounts(_token: Address): ethereum.CallResult<BigInt> {
+  try_ndolAmounts(_token: Address): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "nusdAmounts",
-      "nusdAmounts(address):(uint256)",
+      "ndolAmounts",
+      "ndolAmounts(address):(uint256)",
       [ethereum.Value.fromAddress(_token)]
     );
     if (result.reverted) {
@@ -375,7 +375,7 @@ export class VaultNUSDFacet extends ethereum.SmartContract {
 
   poolAmounts(_token: Address): BigInt {
     let result = super.call("poolAmounts", "poolAmounts(address):(uint256)", [
-      ethereum.Value.fromAddress(_token)
+      ethereum.Value.fromAddress(_token),
     ]);
 
     return result[0].toBigInt();
@@ -417,25 +417,25 @@ export class VaultNUSDFacet extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  sellNUSD(_token: Address, _receiver: Address): BigInt {
-    let result = super.call("sellNUSD", "sellNUSD(address,address):(uint256)", [
+  sellNDOL(_token: Address, _receiver: Address): BigInt {
+    let result = super.call("sellNDOL", "sellNDOL(address,address):(uint256)", [
       ethereum.Value.fromAddress(_token),
-      ethereum.Value.fromAddress(_receiver)
+      ethereum.Value.fromAddress(_receiver),
     ]);
 
     return result[0].toBigInt();
   }
 
-  try_sellNUSD(
+  try_sellNDOL(
     _token: Address,
     _receiver: Address
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "sellNUSD",
-      "sellNUSD(address,address):(uint256)",
+      "sellNDOL",
+      "sellNDOL(address,address):(uint256)",
       [
         ethereum.Value.fromAddress(_token),
-        ethereum.Value.fromAddress(_receiver)
+        ethereum.Value.fromAddress(_receiver),
       ]
     );
     if (result.reverted) {
@@ -449,7 +449,7 @@ export class VaultNUSDFacet extends ethereum.SmartContract {
     let result = super.call("swap", "swap(address,address,address):(uint256)", [
       ethereum.Value.fromAddress(_tokenIn),
       ethereum.Value.fromAddress(_tokenOut),
-      ethereum.Value.fromAddress(_receiver)
+      ethereum.Value.fromAddress(_receiver),
     ]);
 
     return result[0].toBigInt();
@@ -466,7 +466,7 @@ export class VaultNUSDFacet extends ethereum.SmartContract {
       [
         ethereum.Value.fromAddress(_tokenIn),
         ethereum.Value.fromAddress(_tokenOut),
-        ethereum.Value.fromAddress(_receiver)
+        ethereum.Value.fromAddress(_receiver),
       ]
     );
     if (result.reverted) {
@@ -500,20 +500,20 @@ export class VaultNUSDFacet extends ethereum.SmartContract {
   }
 }
 
-export class BuyNUSDCall extends ethereum.Call {
-  get inputs(): BuyNUSDCall__Inputs {
-    return new BuyNUSDCall__Inputs(this);
+export class BuyNDOLCall extends ethereum.Call {
+  get inputs(): BuyNDOLCall__Inputs {
+    return new BuyNDOLCall__Inputs(this);
   }
 
-  get outputs(): BuyNUSDCall__Outputs {
-    return new BuyNUSDCall__Outputs(this);
+  get outputs(): BuyNDOLCall__Outputs {
+    return new BuyNDOLCall__Outputs(this);
   }
 }
 
-export class BuyNUSDCall__Inputs {
-  _call: BuyNUSDCall;
+export class BuyNDOLCall__Inputs {
+  _call: BuyNDOLCall;
 
-  constructor(call: BuyNUSDCall) {
+  constructor(call: BuyNDOLCall) {
     this._call = call;
   }
 
@@ -526,10 +526,10 @@ export class BuyNUSDCall__Inputs {
   }
 }
 
-export class BuyNUSDCall__Outputs {
-  _call: BuyNUSDCall;
+export class BuyNDOLCall__Outputs {
+  _call: BuyNDOLCall;
 
-  constructor(call: BuyNUSDCall) {
+  constructor(call: BuyNDOLCall) {
     this._call = call;
   }
 
@@ -538,20 +538,20 @@ export class BuyNUSDCall__Outputs {
   }
 }
 
-export class SellNUSDCall extends ethereum.Call {
-  get inputs(): SellNUSDCall__Inputs {
-    return new SellNUSDCall__Inputs(this);
+export class SellNDOLCall extends ethereum.Call {
+  get inputs(): SellNDOLCall__Inputs {
+    return new SellNDOLCall__Inputs(this);
   }
 
-  get outputs(): SellNUSDCall__Outputs {
-    return new SellNUSDCall__Outputs(this);
+  get outputs(): SellNDOLCall__Outputs {
+    return new SellNDOLCall__Outputs(this);
   }
 }
 
-export class SellNUSDCall__Inputs {
-  _call: SellNUSDCall;
+export class SellNDOLCall__Inputs {
+  _call: SellNDOLCall;
 
-  constructor(call: SellNUSDCall) {
+  constructor(call: SellNDOLCall) {
     this._call = call;
   }
 
@@ -564,10 +564,10 @@ export class SellNUSDCall__Inputs {
   }
 }
 
-export class SellNUSDCall__Outputs {
-  _call: SellNUSDCall;
+export class SellNDOLCall__Outputs {
+  _call: SellNDOLCall;
 
-  constructor(call: SellNUSDCall) {
+  constructor(call: SellNDOLCall) {
     this._call = call;
   }
 

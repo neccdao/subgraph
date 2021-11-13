@@ -478,7 +478,7 @@ export class InitializeCall__Inputs {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get _nusd(): Address {
+  get _ndol(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 }

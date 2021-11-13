@@ -84,16 +84,16 @@ export class DecreaseGuaranteedUsd__Params {
   }
 }
 
-export class DecreaseNUSDAmount extends ethereum.Event {
-  get params(): DecreaseNUSDAmount__Params {
-    return new DecreaseNUSDAmount__Params(this);
+export class DecreaseNDOLAmount extends ethereum.Event {
+  get params(): DecreaseNDOLAmount__Params {
+    return new DecreaseNDOLAmount__Params(this);
   }
 }
 
-export class DecreaseNUSDAmount__Params {
-  _event: DecreaseNUSDAmount;
+export class DecreaseNDOLAmount__Params {
+  _event: DecreaseNDOLAmount;
 
-  constructor(event: DecreaseNUSDAmount) {
+  constructor(event: DecreaseNDOLAmount) {
     this._event = event;
   }
 
@@ -172,16 +172,16 @@ export class IncreaseGuaranteedUsd__Params {
   }
 }
 
-export class IncreaseNUSDAmount extends ethereum.Event {
-  get params(): IncreaseNUSDAmount__Params {
-    return new IncreaseNUSDAmount__Params(this);
+export class IncreaseNDOLAmount extends ethereum.Event {
+  get params(): IncreaseNDOLAmount__Params {
+    return new IncreaseNDOLAmount__Params(this);
   }
 }
 
-export class IncreaseNUSDAmount__Params {
-  _event: IncreaseNUSDAmount;
+export class IncreaseNDOLAmount__Params {
+  _event: IncreaseNDOLAmount;
 
-  constructor(event: IncreaseNUSDAmount) {
+  constructor(event: IncreaseNDOLAmount) {
     this._event = event;
   }
 

@@ -23,7 +23,7 @@ import {
   CollectSwapFees as CollectSwapFeesEvent,
   UpdateFundingRate as UpdateFundingRateEvent,
   IncreaseGuaranteedUsd as IncreaseGuaranteedUsdEvent,
-  IncreaseNUSDAmount as IncreaseNUSDAmountEvent,
+  IncreaseNDOLAmount as IncreaseNDOLAmountEvent,
   IncreasePoolAmount as IncreasePoolAmountEvent,
   IncreaseReservedAmount as IncreaseReservedAmountEvent,
 } from "../generated/VaultLib/VaultLib";
@@ -31,11 +31,11 @@ import {
 import { DirectPoolDeposit as DirectPoolDepositEvent } from "../generated/VaultConfigFacet/VaultConfigFacet";
 
 import {
-  BuyNUSD as BuyNUSDEvent,
-  SellNUSD as SellNUSDEvent,
+  BuyNDOL as BuyNDOLEvent,
+  SellNDOL as SellNDOLEvent,
   Swap as VaultSwapEvent,
-  VaultNUSDFacet,
-} from "../generated/VaultNUSDFacet/VaultNUSDFacet";
+  VaultNDOLFacet,
+} from "../generated/VaultNDOLFacet/VaultNDOLFacet";
 
 import { DirectPoolDeposit } from "../generated/schema";
 
@@ -46,47 +46,47 @@ import {
   createUnsignedBigIntEventParameter,
 } from "./create-event-parameter";
 
-export function createSellNUSDEvent(
+export function createSellNDOLEvent(
   account: Address,
   token: Address,
   tokenAmount: BigInt,
-  nusdAmount: BigInt
-): SellNUSDEvent {
-  let event = new SellNUSDEvent();
+  ndolAmount: BigInt
+): SellNDOLEvent {
+  let event = new SellNDOLEvent();
   event.parameters = new Array();
 
   createAddressEventParameter(event, account);
   createAddressEventParameter(event, token);
   createUnsignedBigIntEventParameter(event, tokenAmount);
-  createUnsignedBigIntEventParameter(event, nusdAmount);
+  createUnsignedBigIntEventParameter(event, ndolAmount);
 
   return event;
 }
 
-export function createBuyNUSDEvent(
+export function createBuyNDOLEvent(
   account: Address,
   token: Address,
   tokenAmount: BigInt,
-  nusdAmount: BigInt
-): BuyNUSDEvent {
-  let event = new BuyNUSDEvent();
+  ndolAmount: BigInt
+): BuyNDOLEvent {
+  let event = new BuyNDOLEvent();
   event.parameters = new Array();
 
   createAddressEventParameter(event, account);
   createAddressEventParameter(event, token);
   createUnsignedBigIntEventParameter(event, tokenAmount);
-  createUnsignedBigIntEventParameter(event, nusdAmount);
+  createUnsignedBigIntEventParameter(event, ndolAmount);
 
   return event;
 }
 
-// event BuyNUSD(
+// event BuyNDOL(
 //   address account,
 //   address token,
 //   uint256 tokenAmount,
-//   uint256 nusdAmount
+//   uint256 ndolAmount
 // );
-export function handleBuyNUSD(event: BuyNUSDEvent): void {
+export function handleBuyNDOL(event: BuyNDOLEvent): void {
   let account = Account.load(event.params.account.toHexString());
   if (account == null) {
     account = new Account(event.params.account.toHexString());
@@ -96,13 +96,13 @@ export function handleBuyNUSD(event: BuyNUSDEvent): void {
   let action = new Action(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
   );
-  action.type = "BuyNUSD";
+  action.type = "BuyNDOL";
   action.account = event.params.account.toHexString();
   action.timestamp = event.block.timestamp;
 
   action.token = event.params.token;
   action.tokenAmount = event.params.tokenAmount;
-  action.nusdAmount = event.params.nusdAmount;
+  action.ndolAmount = event.params.ndolAmount;
   let lp = LP.load(
     event.params.account.toHex() + "-" + event.params.token.toHexString()
   );
@@ -113,10 +113,10 @@ export function handleBuyNUSD(event: BuyNUSDEvent): void {
     lp.account = event.params.account.toHexString();
     lp.token = event.params.token;
     lp.tokenAmount = event.params.tokenAmount;
-    lp.nusdAmount = event.params.nusdAmount;
+    lp.ndolAmount = event.params.ndolAmount;
   } else {
     lp.tokenAmount = lp.tokenAmount.plus(event.params.tokenAmount);
-    lp.nusdAmount = lp.nusdAmount.plus(event.params.nusdAmount);
+    lp.ndolAmount = lp.ndolAmount.plus(event.params.ndolAmount);
   }
 
   lp.save();
@@ -181,7 +181,7 @@ export function createCollectMarginFeesEvent(
     event CollectMarginFees(address token, uint256 feeUsd, uint256 feeTokens);
 */
 export function handleCollectMarginFees(event: CollectMarginFeesEvent): void {
-  let vaultNUSD = VaultNUSDFacet.bind(event.address);
+  let vaultNDOL = VaultNDOLFacet.bind(event.address);
   let collateral = Collateral.load(event.params.token.toHexString());
   if (collateral == null) {
     collateral = new Collateral(event.params.token.toHexString());
@@ -191,7 +191,7 @@ export function handleCollectMarginFees(event: CollectMarginFeesEvent): void {
     collateral.shorts = BigInt.fromI32(0);
     collateral.feeReserves = BigInt.fromI32(0);
     collateral.guaranteedUsd = BigInt.fromI32(0);
-    collateral.nusdAmounts = BigInt.fromI32(0);
+    collateral.ndolAmounts = BigInt.fromI32(0);
     collateral.cumulativeFundingRate = BigInt.fromI32(0);
     collateral.lastFundingTime = BigInt.fromI32(0);
     collateral.utilisationRate = BigInt.fromI32(0);
@@ -200,7 +200,7 @@ export function handleCollectMarginFees(event: CollectMarginFeesEvent): void {
     collateral.longLiquidations = BigInt.fromI32(0);
     collateral.shortLiquidations = BigInt.fromI32(0);
   }
-  let feeReserves = vaultNUSD.try_feeReserves(event.params.token);
+  let feeReserves = vaultNDOL.try_feeReserves(event.params.token);
   if (!feeReserves.reverted) {
     collateral.feeReserves = feeReserves.value;
   }
@@ -223,7 +223,7 @@ export function createCollectSwapFeesEvent(
 }
 
 export function handleCollectSwapFees(event: CollectSwapFeesEvent): void {
-  let vaultNUSD = VaultNUSDFacet.bind(event.address);
+  let vaultNDOL = VaultNDOLFacet.bind(event.address);
   let collateral = Collateral.load(event.params.token.toHexString());
   if (collateral == null) {
     collateral = new Collateral(event.params.token.toHexString());
@@ -233,7 +233,7 @@ export function handleCollectSwapFees(event: CollectSwapFeesEvent): void {
     collateral.shorts = BigInt.fromI32(0);
     collateral.feeReserves = BigInt.fromI32(0);
     collateral.guaranteedUsd = BigInt.fromI32(0);
-    collateral.nusdAmounts = BigInt.fromI32(0);
+    collateral.ndolAmounts = BigInt.fromI32(0);
     collateral.cumulativeFundingRate = BigInt.fromI32(0);
     collateral.lastFundingTime = BigInt.fromI32(0);
     collateral.utilisationRate = BigInt.fromI32(0);
@@ -243,7 +243,7 @@ export function handleCollectSwapFees(event: CollectSwapFeesEvent): void {
     collateral.shortLiquidations = BigInt.fromI32(0);
   }
 
-  let feeReserves = vaultNUSD.try_feeReserves(event.params.token);
+  let feeReserves = vaultNDOL.try_feeReserves(event.params.token);
   if (!feeReserves.reverted) {
     collateral.feeReserves = feeReserves.value;
   }
@@ -330,13 +330,13 @@ export function createIncreaseGuaranteedUsdEvent(
 export function handleIncreaseGuaranteedUsd(
   event: IncreaseGuaranteedUsdEvent
 ): void {
-  let vaultNUSD = VaultNUSDFacet.bind(event.address);
+  let vaultNDOL = VaultNDOLFacet.bind(event.address);
   let collateral = Collateral.load(event.params.token.toHexString());
   if (collateral == null) {
     collateral = new Collateral(event.params.token.toHexString());
     collateral.feeReserves = BigInt.fromI32(0);
     collateral.guaranteedUsd = BigInt.fromI32(0);
-    collateral.nusdAmounts = BigInt.fromI32(0);
+    collateral.ndolAmounts = BigInt.fromI32(0);
     collateral.reservedAmounts = BigInt.fromI32(0);
     collateral.poolAmounts = BigInt.fromI32(0);
     collateral.cumulativeFundingRate = BigInt.fromI32(0);
@@ -349,7 +349,7 @@ export function handleIncreaseGuaranteedUsd(
     collateral.longOpenInterest = BigInt.fromI32(0);
     collateral.shortOpenInterest = BigInt.fromI32(0);
   }
-  let guaranteedUsd = vaultNUSD.try_guaranteedUsd(event.params.token);
+  let guaranteedUsd = vaultNDOL.try_guaranteedUsd(event.params.token);
   if (!guaranteedUsd.reverted) {
     collateral.guaranteedUsd = guaranteedUsd.value;
   }
@@ -357,11 +357,11 @@ export function handleIncreaseGuaranteedUsd(
   collateral.save();
 }
 
-export function createIncreaseNUSDAmountEvent(
+export function createIncreaseNDOLAmountEvent(
   token: Address,
   amount: BigInt
-): IncreaseNUSDAmountEvent {
-  let event = new IncreaseNUSDAmountEvent();
+): IncreaseNDOLAmountEvent {
+  let event = new IncreaseNDOLAmountEvent();
   event.parameters = new Array();
 
   createAddressEventParameter(event, token);
@@ -370,9 +370,9 @@ export function createIncreaseNUSDAmountEvent(
   return event;
 }
 
-// emit IncreaseNUSDAmount(_token, _amount);
-export function handleIncreaseNUSDAmount(event: IncreaseNUSDAmountEvent): void {
-  let vaultNUSD = VaultNUSDFacet.bind(event.address);
+// emit IncreaseNDOLAmount(_token, _amount);
+export function handleIncreaseNDOLAmount(event: IncreaseNDOLAmountEvent): void {
+  let vaultNDOL = VaultNDOLFacet.bind(event.address);
   let collateral = Collateral.load(event.params.token.toHexString());
   if (collateral == null) {
     collateral = new Collateral(event.params.token.toHexString());
@@ -382,7 +382,7 @@ export function handleIncreaseNUSDAmount(event: IncreaseNUSDAmountEvent): void {
     collateral.shorts = BigInt.fromI32(0);
     collateral.feeReserves = BigInt.fromI32(0);
     collateral.guaranteedUsd = BigInt.fromI32(0);
-    collateral.nusdAmounts = BigInt.fromI32(0);
+    collateral.ndolAmounts = BigInt.fromI32(0);
     collateral.cumulativeFundingRate = BigInt.fromI32(0);
     collateral.lastFundingTime = BigInt.fromI32(0);
     collateral.utilisationRate = BigInt.fromI32(0);
@@ -392,9 +392,9 @@ export function handleIncreaseNUSDAmount(event: IncreaseNUSDAmountEvent): void {
     collateral.shortLiquidations = BigInt.fromI32(0);
   }
 
-  let nusdAmounts = vaultNUSD.try_nusdAmounts(event.params.token);
-  if (!nusdAmounts.reverted) {
-    collateral.nusdAmounts = nusdAmounts.value;
+  let ndolAmounts = vaultNDOL.try_ndolAmounts(event.params.token);
+  if (!ndolAmounts.reverted) {
+    collateral.ndolAmounts = ndolAmounts.value;
   }
 
   collateral.save();
@@ -414,7 +414,7 @@ export function createIncreasePoolAmountEvent(
 }
 
 export function handleIncreasePoolAmount(event: IncreasePoolAmountEvent): void {
-  let vaultNUSD = VaultNUSDFacet.bind(event.address);
+  let vaultNDOL = VaultNDOLFacet.bind(event.address);
   let collateral = Collateral.load(event.params.token.toHexString());
   if (collateral == null) {
     collateral = new Collateral(event.params.token.toHexString());
@@ -427,13 +427,13 @@ export function handleIncreasePoolAmount(event: IncreasePoolAmountEvent): void {
     collateral.longLiquidations = BigInt.fromI32(0);
     collateral.shortLiquidations = BigInt.fromI32(0);
     collateral.guaranteedUsd = BigInt.fromI32(0);
-    collateral.nusdAmounts = BigInt.fromI32(0);
+    collateral.ndolAmounts = BigInt.fromI32(0);
     collateral.cumulativeFundingRate = BigInt.fromI32(0);
     collateral.lastFundingTime = BigInt.fromI32(0);
     collateral.utilisationRate = BigInt.fromI32(0);
     collateral.reservedAmounts = BigInt.fromI32(0);
   }
-  let poolAmounts = vaultNUSD.try_poolAmounts(event.params.token);
+  let poolAmounts = vaultNDOL.try_poolAmounts(event.params.token);
   if (!poolAmounts.reverted) {
     collateral.poolAmounts = poolAmounts.value;
   }
@@ -650,7 +650,7 @@ export function createIncreaseReservedAmountEvent(
 export function handleIncreaseReservedAmount(
   event: IncreaseReservedAmountEvent
 ): void {
-  let vaultNUSDFacet = VaultNUSDFacet.bind(event.address);
+  let vaultNDOLFacet = VaultNDOLFacet.bind(event.address);
   let vaultFacet = VaultFacet.bind(event.address);
   let collateral = Collateral.load(event.params.token.toHexString());
   if (collateral == null) {
@@ -665,12 +665,12 @@ export function handleIncreaseReservedAmount(
     collateral.longLiquidations = BigInt.fromI32(0);
     collateral.shortLiquidations = BigInt.fromI32(0);
     collateral.guaranteedUsd = BigInt.fromI32(0);
-    collateral.nusdAmounts = BigInt.fromI32(0);
+    collateral.ndolAmounts = BigInt.fromI32(0);
     collateral.cumulativeFundingRate = BigInt.fromI32(0);
     collateral.lastFundingTime = BigInt.fromI32(0);
     collateral.utilisationRate = BigInt.fromI32(0);
   }
-  let reservedAmounts = vaultNUSDFacet.try_reservedAmounts(event.params.token);
+  let reservedAmounts = vaultNDOLFacet.try_reservedAmounts(event.params.token);
   if (!reservedAmounts.reverted) {
     collateral.reservedAmounts = reservedAmounts.value;
   }
@@ -775,13 +775,13 @@ export function handleLiquidatePosition(event: LiquidatePositionEvent): void {
   store.remove("Position", position.id);
 }
 
-// event SellNUSD(
+// event SellNDOL(
 //   address account,
 //   address token,
 //   uint256 tokenAmount,
-//   uint256 nusdAmount
+//   uint256 ndolAmount
 // );
-export function handleSellNUSD(event: SellNUSDEvent): void {
+export function handleSellNDOL(event: SellNDOLEvent): void {
   let account = Account.load(event.params.account.toHexString());
   if (account == null) {
     account = new Account(event.params.account.toHexString());
@@ -791,13 +791,13 @@ export function handleSellNUSD(event: SellNUSDEvent): void {
   let action = new Action(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
   );
-  action.type = "SellNUSD";
+  action.type = "SellNDOL";
   action.account = event.params.account.toHexString();
   action.timestamp = event.block.timestamp;
 
   action.token = event.params.token;
   action.tokenAmount = event.params.tokenAmount;
-  action.nusdAmount = event.params.nusdAmount;
+  action.ndolAmount = event.params.ndolAmount;
 
   action.save();
 
@@ -811,15 +811,15 @@ export function handleSellNUSD(event: SellNUSDEvent): void {
     lp.account = event.params.account.toHexString();
     lp.token = event.params.token;
     lp.tokenAmount = BigInt.fromI32(0).minus(event.params.tokenAmount);
-    lp.nusdAmount = BigInt.fromI32(0).minus(event.params.nusdAmount);
+    lp.ndolAmount = BigInt.fromI32(0).minus(event.params.ndolAmount);
   } else {
     lp.tokenAmount = lp.tokenAmount.minus(event.params.tokenAmount);
-    lp.nusdAmount = lp.nusdAmount.minus(event.params.nusdAmount);
+    lp.ndolAmount = lp.ndolAmount.minus(event.params.ndolAmount);
   }
 
   if (
     lp.tokenAmount.equals(BigInt.fromI32(0)) ||
-    lp.nusdAmount.equals(BigInt.fromI32(0))
+    lp.ndolAmount.equals(BigInt.fromI32(0))
   ) {
     store.remove(
       "LP",
@@ -921,7 +921,7 @@ export function handleUpdateFundingRate(event: UpdateFundingRateEvent): void {
     collateral.longLiquidations = BigInt.fromI32(0);
     collateral.shortLiquidations = BigInt.fromI32(0);
     collateral.guaranteedUsd = BigInt.fromI32(0);
-    collateral.nusdAmounts = BigInt.fromI32(0);
+    collateral.ndolAmounts = BigInt.fromI32(0);
     collateral.cumulativeFundingRate = BigInt.fromI32(0);
     collateral.lastFundingTime = BigInt.fromI32(0);
     collateral.utilisationRate = BigInt.fromI32(0);
@@ -1006,14 +1006,14 @@ export function handleUpdatePosition(event: UpdatePositionEvent): void {
 // export { runTests } from "../tests/IncreasePosition.test";
 // export { runTests } from "../tests/DecreasePosition.test";
 // export { runTests } from "../tests/ClosePosition.test";
-// export { runTests } from "../tests/BuyNUSD.test";
-// export { runTests } from "../tests/SellNUSD.test";
-// export { runTests } from "../tests/SellNUSD-CloseLP.test";
+// export { runTests } from "../tests/BuyNDOL.test";
+// export { runTests } from "../tests/SellNDOL.test";
+// export { runTests } from "../tests/SellNDOL-CloseLP.test";
 // export { runTests } from "../tests/LiquidatePosition.test";
 // export { runTests } from "../tests/CollectMarginFees.test";
 // export { runTests } from "../tests/CollectSwapFees.test";
 // export { runTests } from "../tests/IncreaseGuaranteedUsd.test";
-// export { runTests } from "../tests/IncreaseNUSDAmount.test";
+// export { runTests } from "../tests/IncreaseNDOLAmount.test";
 // export { runTests } from "../tests/IncreaseReservedAmount.test";
 // export { runTests } from "../tests/IncreasePoolAmount.test";
 // export { runTests } from "../tests/UpdateFundingRate.test";

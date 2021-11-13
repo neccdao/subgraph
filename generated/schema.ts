@@ -574,8 +574,8 @@ export class Action extends Entity {
     }
   }
 
-  get nusdAmount(): BigInt | null {
-    let value = this.get("nusdAmount");
+  get ndolAmount(): BigInt | null {
+    let value = this.get("ndolAmount");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -583,11 +583,11 @@ export class Action extends Entity {
     }
   }
 
-  set nusdAmount(value: BigInt | null) {
+  set ndolAmount(value: BigInt | null) {
     if (value === null) {
-      this.unset("nusdAmount");
+      this.unset("ndolAmount");
     } else {
-      this.set("nusdAmount", Value.fromBigInt(value as BigInt));
+      this.set("ndolAmount", Value.fromBigInt(value as BigInt));
     }
   }
 
@@ -682,8 +682,8 @@ export class LP extends Entity {
     }
   }
 
-  get nusdAmount(): BigInt | null {
-    let value = this.get("nusdAmount");
+  get ndolAmount(): BigInt | null {
+    let value = this.get("ndolAmount");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -691,11 +691,11 @@ export class LP extends Entity {
     }
   }
 
-  set nusdAmount(value: BigInt | null) {
+  set ndolAmount(value: BigInt | null) {
     if (value === null) {
-      this.unset("nusdAmount");
+      this.unset("ndolAmount");
     } else {
-      this.set("nusdAmount", Value.fromBigInt(value as BigInt));
+      this.set("ndolAmount", Value.fromBigInt(value as BigInt));
     }
   }
 }
@@ -748,13 +748,13 @@ export class Collateral extends Entity {
     this.set("guaranteedUsd", Value.fromBigInt(value));
   }
 
-  get nusdAmounts(): BigInt {
-    let value = this.get("nusdAmounts");
+  get ndolAmounts(): BigInt {
+    let value = this.get("ndolAmounts");
     return value.toBigInt();
   }
 
-  set nusdAmounts(value: BigInt) {
-    this.set("nusdAmounts", Value.fromBigInt(value));
+  set ndolAmounts(value: BigInt) {
+    this.set("ndolAmounts", Value.fromBigInt(value));
   }
 
   get reservedAmounts(): BigInt {

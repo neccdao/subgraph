@@ -5,8 +5,8 @@ enum ActionType {
   ClosePosition
   LiquidatePosition
   Swap
-  BuyNUSD
-  SellNUSD
+  BuyNDOL
+  SellNDOL
   # Claim
   # ZapSP :
   # Deposit
@@ -66,17 +66,17 @@ type Action @entity {
   amountIn: BigInt
   amountOut: BigInt
 
-  # BuyNUSD | SellNUSD
+  # BuyNDOL | SellNDOL
   token: Bytes
   tokenAmount: BigInt
-  nusdAmount: BigInt
+  ndolAmount: BigInt
 
   # RedeemReward
   amount: BigInt
 
   # TODO:
-  # SentNUSD
-  # ReceivedNUSD
+  # SentNDOL
+  # ReceivedNDOL
   # DYT.transferMintedRewards
   # DYT.claim
 }
@@ -87,14 +87,14 @@ type LP @entity {
 
   token: Bytes
   tokenAmount: BigInt
-  nusdAmount: BigInt
+  ndolAmount: BigInt
 }
 
 type Collateral @entity {
   id: ID!
   feeReserves: BigInt!
   guaranteedUsd: BigInt!
-  nusdAmounts: BigInt!
+  ndolAmounts: BigInt!
   reservedAmounts: BigInt!
   poolAmounts: BigInt!
   cumulativeFundingRate: BigInt!

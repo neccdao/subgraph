@@ -6,7 +6,7 @@ import {
   assert,
   newMockEvent,
 } from "matchstick-as/assembly/index";
-import { Swap as VaultSwapEvent } from "../generated/VaultNUSDFacet/VaultNUSDFacet";
+import { Swap as VaultSwapEvent } from "../generated/VaultNDOLFacet/VaultNDOLFacet";
 import { handleVaultSwap, createVaultSwapEvent } from "../src/mapping";
 
 export function runTests(): void {
