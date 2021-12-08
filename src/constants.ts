@@ -1,3 +1,13 @@
+/*
+    BondDepositoryDiamond_DiamondProxy: '0xf242275C5083c48d118fE07CDf2AD0beB00c2e39'
+    ExchangeDiamond_DiamondProxy: '0x5C75A63d3Ccd6c24B1D5C011077a149596D6f567'
+    NdolDiamond_DiamondProxy: '0x44Fe7e9481476a1708700335D915EF7923eB238B'
+    NeccDiamond_DiamondProxy: '0xc0D4AdF09FE1229a8137fA39408317f4099EA936'
+    TreasuryDiamond_DiamondProxy: '0xc8e1DC911A2bef27c5D5bFfff3c4D52Cc58aD844'
+    nNeccDiamond_DiamondProxy: '0x77ADddDCc089A0fB5985199a7d7531cbe09E0AFC'
+    sNeccDiamond_DiamondProxy: '0xb0e4C97eD0C603e1d8302987d79334b59738061d'
+*/
+
 const VAULT_ADDRESS = "0xc229a8Bd91df6109ad9ceAD8AB897B352769B8eb";
 const ROUTER_ADDRESS = "0xc229a8Bd91df6109ad9ceAD8AB897B352769B8eb";
 export { VAULT_ADDRESS, ROUTER_ADDRESS };

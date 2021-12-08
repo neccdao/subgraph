@@ -7,7 +7,7 @@ dataSources:
     network: rinkeby
     source:
       # NOTE - Update in constants.ts too
-      address: "0x2DE2403fab78f9B12ADB283c90e9e7B3EE51be5e"
+      address: "0x5C75A63d3Ccd6c24B1D5C011077a149596D6f567"
       abi: VaultFacet
       startBlock: 9500000
     mapping:
@@ -46,7 +46,7 @@ dataSources:
     network: rinkeby
     source:
       # NOTE - Update in constants.ts too
-      address: "0x2DE2403fab78f9B12ADB283c90e9e7B3EE51be5e"
+      address: "0x5C75A63d3Ccd6c24B1D5C011077a149596D6f567"
       abi: VaultLib
       startBlock: 9500000
     mapping:
@@ -99,7 +99,7 @@ dataSources:
     network: rinkeby
     source:
       # NOTE - Update in constants.ts too
-      address: "0x2DE2403fab78f9B12ADB283c90e9e7B3EE51be5e"
+      address: "0x5C75A63d3Ccd6c24B1D5C011077a149596D6f567"
       abi: VaultNDOLFacet
       startBlock: 9500000
     mapping:
@@ -130,7 +130,7 @@ dataSources:
     network: rinkeby
     source:
       # NOTE - Update in constants.ts too
-      address: "0x2DE2403fab78f9B12ADB283c90e9e7B3EE51be5e"
+      address: "0x5C75A63d3Ccd6c24B1D5C011077a149596D6f567"
       abi: VaultConfigFacet
       startBlock: 9500000
     mapping:
