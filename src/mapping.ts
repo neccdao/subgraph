@@ -756,23 +756,22 @@ export function handleLiquidatePosition(event: LiquidatePositionEvent): void {
   action.markPrice = event.params.markPrice;
 
   let vaultFacet = VaultFacet.bind(event.address);
-  let result = vaultFacet.validateLiquidation(
+  let result = vaultFacet.try_validateLiquidation(
     event.params.account,
     event.params.collateralToken,
     event.params.indexToken,
     action.isLong,
     false
   );
-  let liquidatedStatus = result.value0;
-  let fee = result.value1;
-  let position = new Position(event.params.key.toHexString());
-
-  action.fee = fee;
-  action.liquidatedStatus = liquidatedStatus;
-
-  action.save();
-
-  store.remove("Position", position.id);
+  if (!result.reverted) {
+    let liquidatedStatus = result.value.value0;
+    let fee = result.value.value1;
+    let position = new Position(event.params.key.toHexString());
+    action.fee = fee;
+    action.liquidatedStatus = liquidatedStatus;
+    action.save();
+    store.remove("Position", position.id);
+  }
 }
 
 // event SellNDOL(
